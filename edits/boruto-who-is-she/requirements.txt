@@ -1,0 +1,7 @@
+numpy>=1.26
+opencv-python-headless>=4.9
+pillow>=10.0
+librosa>=0.10
+spandrel>=0.4
+torch>=2.2
+torchvision>=0.17
