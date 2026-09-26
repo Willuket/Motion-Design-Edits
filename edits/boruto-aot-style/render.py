@@ -901,6 +901,13 @@ def sh_title(lt, d, t):
         lay = lay + cv2.GaussianBlur(lay, (0, 0), 4) * 0.8
         c = screen(c, lay[..., None] * 0.9)
     o2 = ease_out(ramp(t, 9.75, 10.2))
+    # Chrome needs a darker plate than the shattered glass to read.
+    pc = zp(W * 0.5, H * 0.72)
+    nc = zp(W * 0.2, H * 0.37)
+    pool = np.exp(-(((xx - pc[0]) / (W * 0.3 * zs)) ** 2 + ((yy - pc[1]) / (H * 0.2 * zs)) ** 2))
+    pool = np.maximum(pool, 0.8 * np.exp(-(((xx - nc[0]) / (W * 0.24 * zs)) ** 2
+                                           + ((yy - nc[1]) / (H * 0.09 * zs)) ** 2)))
+    c = c * (1 - pool[..., None] * 0.5 * max(o2, ramp(t, WORDS["TIME"] - 0.1, WORDS["TIME"])))
     for i, line in enumerate(("THE BOY THE", "WORLD FORGOT")):
         lx, ly = zp(W * 0.64, H * (0.6 + 0.075 * i))
         text(c, line, "cinzel", 38, lx, ly, o2, zs, anchor="r", fill="chrome", tracking=2,
@@ -959,7 +966,7 @@ def sh_sky(lt, d, t):
         inv = np.clip((inv - 0.5) * 1.25 + 0.5, 0, 1)
         inv = inv * np.float32([1.05, 1.0, 1.02])
         c = c * (1 - neg) + inv * neg
-    words2 = [("SUCH", WORDS["SUCH"]), ("SUCH AS", WORDS["AS"])]
+    words2 = [("SUCH", WORDS["SUCH"]), ("AS", 15.02)]
     cur = word_seq(t, words2)
     if cur:
         o, b, r = reveal(t, WORDS["SUCH"], 0.25)
