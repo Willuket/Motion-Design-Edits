@@ -1,0 +1,9 @@
+numpy>=1.26
+opencv-python-headless>=4.9
+pillow>=10.0
+spandrel>=0.4
+torch>=2.2
+rembg>=2.0
+onnxruntime>=1.17
+simple-lama-inpainting>=0.1
+ddgs>=9.0
