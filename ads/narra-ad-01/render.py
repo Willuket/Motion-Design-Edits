@@ -774,8 +774,8 @@ def scene_writing(t):
     ph, pw = page.shape[:2]
     # candle light pooled on the page
     yy, xx = np.mgrid[0:ph, 0:pw].astype(np.float32)
-    light = np.clip(1.1 - np.sqrt(((xx - pw * 0.55) / (pw * 0.95)) ** 2 + ((yy - ph * 0.4) / (ph * 0.9)) ** 2), 0.3, 1.0)
-    page = page * (light * 0.74)[..., None] * hexc("#fff1dc")
+    light = np.clip(1.08 - 0.9 * np.sqrt(((xx - pw * 0.58) / (pw * 0.8)) ** 2 + ((yy - ph * 0.36) / (ph * 0.75)) ** 2), 0.22, 1.0) ** 1.4
+    page = page * (light * 0.86)[..., None] * hexc("#ffe7c4")
     p = eo3(prog(t, 7.2, 1.6))
     R = rot(math.radians(lerp(30, 20, p)), math.radians(lerp(-9, -3, p)), math.radians(lerp(-6, -3, p)))
     pwu, phu = 1.0, 1.3
@@ -1032,7 +1032,7 @@ def make_tree(seed=8):
             grow(pts[-1, 0] + math.sin(a) * length / 14, pts[-1, 1] + math.cos(a) * length / 14,
                  a, length * 0.82, level + 1, on_path and k == pick)
 
-    trunk = np.stack([np.zeros(14), np.linspace(-1.5, 1.0, 14)], 1)
+    trunk = np.stack([np.zeros(14), np.linspace(0.2, 1.0, 14)], 1)
     segs.append((-1, trunk, True))
     grow(0.0, 1.0, 0.0, 2.1, 0, True)
     return segs
@@ -1045,8 +1045,8 @@ def scene_paths(t):
     lt = t - 14.4
     p = eio3(prog(t, 14.4, 2.4))
     H0 = 820
-    hcam = lerp(1.4, 3.6, p)
-    camz = lerp(-1.0, 0.6, p)
+    hcam = lerp(2.0, 3.6, p)
+    camz = lerp(-1.2, 0.4, p)
     camx = 0.0
     img = sky(H0)
     TEX["dust_a"].draw(img, t, color=hexc("#cfd8ff"), strength=0.25)
@@ -1054,7 +1054,7 @@ def scene_paths(t):
     dim_m = np.zeros((H, W), np.uint8)
     nodes = []
     for level, pts, on in TREE:
-        g = prog(t, 14.45 + (level + 1) * 0.14, 0.3)
+        g = prog(t, 14.4 + (level + 1) * 0.12, 0.13)
         if g <= 0:
             continue
         k = max(2, int(len(pts) * g))
